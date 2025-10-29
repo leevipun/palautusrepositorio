@@ -5,3 +5,5 @@ htmlcov/
 *.lock
 *.zip
 *.toml
+.coverage
+.coveragerc
