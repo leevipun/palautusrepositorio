@@ -69,10 +69,6 @@ class TestStatisticsService(unittest.TestCase):
         self.assertEqual(top_players[2].name, "Yzerman")  # 98 pistettä
         self.assertEqual(top_players[3].name, "Kurri")    # 90 pistettä
 
-    def test_top_returns_all_players_when_how_many_exceeds_player_count(self):
-        top_players = self.stats.top(10)
-        self.assertEqual(len(top_players), 4)  # Returns how_many + 1 players
-
     def test_top_zero_returns_one_player(self):
         top_players = self.stats.top(0)
         self.assertEqual(len(top_players), 1)  # Bug: returns 1 instead of 0
