@@ -1,0 +1,15 @@
+[FORMAT]
+max-line-length=150
+indent-after-paren=4
+
+[REFACTORING]
+max-nested-blocks=2
+
+[DESIGN]
+max-statements=10
+
+[BASIC]
+good-names=i,j,k,ex,Run,_
+
+[MESSAGES CONTROL]
+disable=C0111  # missing-docstring
