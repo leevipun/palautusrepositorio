@@ -85,3 +85,49 @@ class TestKauppa(unittest.TestCase):
 
         self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 5)
         self.varasto_mock.ota_varastosta.assert_called()
+
+    def test_aloita_asiointi_nollaa_edellisen_ostoksen(self):
+        # Tehdään ensin yksi ostos
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # Aloitetaan uusi asiointi
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # Varmistetaan että toisessa ostoksessa hinta on vain toisen tuotteen hinta (8)
+        # eikä ensimmäisen ostoksen hinta (5) näy mukana
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 8)
+
+    def test_uusi_viitenumero_joka_maksutapahtumalle(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # varmistetaan että tässä vaiheessa viitegeneraattorin metodia uusi on kutsuttu kerran
+        self.assertEqual(self.viitegeneraattori_mock.uusi.call_count, 1)
+
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # varmistetaan että tässä vaiheessa viitegeneraattorin metodia uusi on kutsuttu kaksi kertaa
+        self.assertEqual(self.viitegeneraattori_mock.uusi.call_count, 2)
+
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # varmistetaan että tässä vaiheessa viitegeneraattorin metodia uusi on kutsuttu kolme kertaa
+        self.assertEqual(self.viitegeneraattori_mock.uusi.call_count, 3)
+
+    def test_poista_korista(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.poista_korista(1)
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 8)
