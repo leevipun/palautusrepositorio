@@ -12,44 +12,30 @@ class TennisGame:
             self.m_score2 = self.m_score2 + 1
 
     def get_score(self):
-        score = ""
-        temp_score = 0
-
         if self.m_score1 == self.m_score2:
-            if self.m_score1 == 0:
-                score = "Love-All"
-            elif self.m_score1 == 1:
-                score = "Fifteen-All"
-            elif self.m_score1 == 2:
-                score = "Thirty-All"
-            else:
-                score = "Deuce"
+            return self._get_tied_score()
         elif self.m_score1 >= 4 or self.m_score2 >= 4:
-            minus_result = self.m_score1 - self. m_score2
-
-            if minus_result == 1:
-                score = "Advantage player1"
-            elif minus_result == -1:
-                score = "Advantage player2"
-            elif minus_result >= 2:
-                score = "Win for player1"
-            else:
-                score = "Win for player2"
+            return self._get_endgame_score()
         else:
-            for i in range(1, 3):
-                if i == 1:
-                    temp_score = self.m_score1
-                else:
-                    score = score + "-"
-                    temp_score = self.m_score2
+            return self._get_running_score()
 
-                if temp_score == 0:
-                    score = score + "Love"
-                elif temp_score == 1:
-                    score = score + "Fifteen"
-                elif temp_score == 2:
-                    score = score + "Thirty"
-                elif temp_score == 3:
-                    score = score + "Forty"
+    def _get_tied_score(self):
+        tied_scores = {0: "Love-All", 1: "Fifteen-All", 2: "Thirty-All"}
+        return tied_scores.get(self.m_score1, "Deuce")
 
-        return score
+    def _get_endgame_score(self):
+        minus_result = self.m_score1 - self.m_score2
+        if minus_result == 1:
+            return "Advantage player1"
+        elif minus_result == -1:
+            return "Advantage player2"
+        elif minus_result >= 2:
+            return "Win for player1"
+        else:
+            return "Win for player2"
+
+    def _get_running_score(self):
+        score_names = {0: "Love", 1: "Fifteen", 2: "Thirty", 3: "Forty"}
+        player1_score = score_names[self.m_score1]
+        player2_score = score_names[self.m_score2]
+        return f"{player1_score}-{player2_score}"
