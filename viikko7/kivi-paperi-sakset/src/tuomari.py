@@ -14,8 +14,8 @@ class Tuomari:
             self.tokan_pisteet = self.tokan_pisteet + 1
 
     def on_peli_ohi(self):
-        """Tarkistaa, onko peli loppunut (joku saavuttanut 5 voittoa)"""
-        return self.ekan_pisteet >= 5 or self.tokan_pisteet >= 5
+        """Tarkistaa, onko peli loppunut (joku saavuttanut 3 voittoa)"""
+        return self.ekan_pisteet >= 3 or self.tokan_pisteet >= 3
 
     def __str__(self):
         return f"Pelitilanne: {self.ekan_pisteet} - {self.tokan_pisteet}\nTasapelit: {self.tasapelit}"

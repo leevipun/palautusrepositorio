@@ -101,32 +101,32 @@ class TestTuomari:
 
     def test_peli_ei_ole_ohi_neljalla_voitolla(self):
         """Tarkistetaan, että peli ei ole ohi neljällä voitolla"""
+        for _ in range(2):
+            self.tuomari.kirjaa_siirto("k", "s")
+        
+        assert self.tuomari.ekan_pisteet == 2
+        assert self.tuomari.on_peli_ohi() is False
+
+    def test_peli_on_ohi_viidella_voitolla_eka(self):
+        """Tarkistetaan, että peli on ohi kun eka pelaaja saa 3 voittoa"""
+        for _ in range(3):
+            self.tuomari.kirjaa_siirto("k", "s")
+        
+        assert self.tuomari.ekan_pisteet == 3
+        assert self.tuomari.on_peli_ohi() is True
+
+    def test_peli_on_ohi_viidella_voitolla_toka(self):
+        """Tarkistetaan, että peli on ohi kun toka pelaaja saa 3 voittoa"""
+        for _ in range(3):
+            self.tuomari.kirjaa_siirto("s", "k")
+        
+        assert self.tuomari.tokan_pisteet == 3
+        assert self.tuomari.on_peli_ohi() is True
+
+    def test_peli_on_ohi_yli_viidella_voitolla(self):
+        """Tarkistetaan, että peli on ohi myös yli kolmella voitolla"""
         for _ in range(4):
             self.tuomari.kirjaa_siirto("k", "s")
         
         assert self.tuomari.ekan_pisteet == 4
-        assert self.tuomari.on_peli_ohi() is False
-
-    def test_peli_on_ohi_viidella_voitolla_eka(self):
-        """Tarkistetaan, että peli on ohi kun eka pelaaja saa 5 voittoa"""
-        for _ in range(5):
-            self.tuomari.kirjaa_siirto("k", "s")
-        
-        assert self.tuomari.ekan_pisteet == 5
-        assert self.tuomari.on_peli_ohi() is True
-
-    def test_peli_on_ohi_viidella_voitolla_toka(self):
-        """Tarkistetaan, että peli on ohi kun toka pelaaja saa 5 voittoa"""
-        for _ in range(5):
-            self.tuomari.kirjaa_siirto("s", "k")
-        
-        assert self.tuomari.tokan_pisteet == 5
-        assert self.tuomari.on_peli_ohi() is True
-
-    def test_peli_on_ohi_yli_viidella_voitolla(self):
-        """Tarkistetaan, että peli on ohi myös yli viidellä voitolla"""
-        for _ in range(6):
-            self.tuomari.kirjaa_siirto("k", "s")
-        
-        assert self.tuomari.ekan_pisteet == 6
         assert self.tuomari.on_peli_ohi() is True
