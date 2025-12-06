@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kivi-Paperi-Sakset</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 0.9em;
+        }
+
+        .menu-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .menu-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .menu-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .menu-description {
+            color: #999;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        .score-board {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .score-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .game-area {
+            margin-bottom: 40px;
+        }
+
+        .result-display {
+            min-height: 60px;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .result-win {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .result-lose {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .result-draw {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .moves-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .move-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .move-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .move-emoji {
+            font-size: 3.5em;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .buttons-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .move-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .move-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .move-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .move-btn .emoji {
+            font-size: 1.8em;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .reset-btn {
+            background: #6c757d;
+            color: white;
+            padding: 12px 20px;
+        }
+
+        .reset-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-btn {
+            background: #fd7e14;
+            color: white;
+            padding: 12px 20px;
+        }
+
+        .back-btn:hover {
+            background: #e0600c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .player-label {
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .game-info {
+            text-align: center;
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            color: #0056b3;
+            font-weight: 600;
+        }
+
+        .two-player-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .reveal-btn {
+            background: #28a745;
+            color: white;
+            padding: 15px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .reveal-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            display: contents;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .move-btn {
+                min-height: 70px;
+                font-size: 0.9em;
+            }
+
+            .move-btn .emoji {
+                font-size: 1.5em;
+            }
+
+            .score-value {
+                font-size: 2em;
+            }
+
+            .move-emoji {
+                font-size: 2.5em;
+            }
+
+            .menu-btn {
+                padding: 15px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if game_type is none %}
+        <!-- Valintanäyttö -->
+        <h1>🎮 Kivi-Paperi-Sakset</h1>
+        <p class="subtitle">Valitse pelitapa</p>
+        
+        <div class="menu-options">
+            <form method="POST" action="/start-game">
+                <input type="hidden" name="game_type" value="ai_easy">
+                <button type="submit" class="menu-btn">
+                    🤖 Helppo Tekoäly
+                    <div class="menu-description">Satunnaisia siirtoja tekevä vastustaja</div>
+                </button>
+            </form>
+            
+            <form method="POST" action="/start-game">
+                <input type="hidden" name="game_type" value="ai_hard">
+                <button type="submit" class="menu-btn">
+                    🧠 Vaikea Tekoäly
+                    <div class="menu-description">Älykkäistä siirroista päättelevä vastustaja</div>
+                </button>
+            </form>
+            
+            <form method="POST" action="/start-game">
+                <input type="hidden" name="game_type" value="two_players">
+                <button type="submit" class="menu-btn">
+                    👥 Kahden Pelaajan Peli
+                    <div class="menu-description">Pelaa ystävän kanssa samalla näytöllä</div>
+                </button>
+            </form>
+        </div>
+
+        {% else %}
+        <!-- Pelinäyttö -->
+        <h1>🎮 Kivi-Paperi-Sakset</h1>
+        <p class="subtitle">
+            {% if game_type == 'ai_easy' %}
+                Helppo tekoäly
+            {% elif game_type == 'ai_hard' %}
+                Vaikea tekoäly
+            {% else %}
+                Kahden pelaajan peli
+            {% endif %}
+        </p>
+
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Pelaaja 1</div>
+                <div class="score-value">{{ player_score }}</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Tasapelit</div>
+                <div class="score-value">{{ draws }}</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">
+                    {% if game_type == 'two_players' %}
+                        Pelaaja 2
+                    {% else %}
+                        Tekoäly
+                    {% endif %}
+                </div>
+                <div class="score-value">{{ opponent_score }}</div>
+            </div>
+        </div>
+
+        {% if result_message %}
+        <div class="result-display">
+            <div class="result-message {{ result_class }}">
+                {{ result_message }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if game_type == 'two_players' and last_result is none %}
+        <div class="game-info">
+            ℹ️ Pelaaja 1 valitsee siirtonsa, sitten Pelaaja 2 - tulokset paljastetaan yhdessä!
+        </div>
+        {% endif %}
+
+        {% if last_result %}
+        <div class="moves-display">
+            <div class="move-container">
+                <div class="move-label">Pelaaja 1</div>
+                <div class="move-emoji">
+                    {% if last_result.player_move == 'k' %}🪨
+                    {% elif last_result.player_move == 'p' %}📄
+                    {% else %}✂️{% endif %}
+                </div>
+            </div>
+            <div class="move-container">
+                <div class="move-label">
+                    {% if game_type == 'two_players' %}
+                        Pelaaja 2
+                    {% else %}
+                        Tekoäly
+                    {% endif %}
+                </div>
+                <div class="move-emoji">
+                    {% if last_result.opponent_move == 'k' %}🪨
+                    {% elif last_result.opponent_move == 'p' %}📄
+                    {% else %}✂️{% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="game-area">
+            {% if game_type != 'two_players' %}
+            <!-- AI vs pelaaja napit -->
+            <form method="POST" action="/play" class="buttons-group">
+                <button type="submit" name="move" value="k" class="move-btn">
+                    <span class="emoji">🪨</span>
+                    <span>Kivi</span>
+                </button>
+                <button type="submit" name="move" value="p" class="move-btn">
+                    <span class="emoji">📄</span>
+                    <span>Paperi</span>
+                </button>
+                <button type="submit" name="move" value="s" class="move-btn">
+                    <span class="emoji">✂️</span>
+                    <span>Sakset</span>
+                </button>
+            </form>
+
+            {% else %}
+            <!-- Kahden pelaajan peli -->
+            {% if player1_played %}
+                <div class="player-label">✅ Pelaaja 1 valitsi. Pelaaja 2, valitse siirtosi:</div>
+                <form method="POST" action="/play-player2" class="buttons-group">
+                    <button type="submit" name="move" value="k" class="move-btn">
+                        <span class="emoji">🪨</span>
+                        <span>Kivi</span>
+                    </button>
+                    <button type="submit" name="move" value="p" class="move-btn">
+                        <span class="emoji">📄</span>
+                        <span>Paperi</span>
+                    </button>
+                    <button type="submit" name="move" value="s" class="move-btn">
+                        <span class="emoji">✂️</span>
+                        <span>Sakset</span>
+                    </button>
+                </form>
+            {% else %}
+                <div class="player-label">Pelaaja 1, valitse siirtosi:</div>
+                <form method="POST" action="/play-player1" class="buttons-group">
+                    <button type="submit" name="move" value="k" class="move-btn">
+                        <span class="emoji">🪨</span>
+                        <span>Kivi</span>
+                    </button>
+                    <button type="submit" name="move" value="p" class="move-btn">
+                        <span class="emoji">📄</span>
+                        <span>Paperi</span>
+                    </button>
+                    <button type="submit" name="move" value="s" class="move-btn">
+                        <span class="emoji">✂️</span>
+                        <span>Sakset</span>
+                    </button>
+                </form>
+            {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="control-buttons">
+            <form method="POST" action="/reset" style="display: contents;">
+                <button type="submit" class="reset-btn">🔄 Uusi Peli</button>
+            </form>
+            <form method="POST" action="/back-to-menu" style="display: contents;">
+                <button type="submit" class="back-btn">← Takaisin Valikkoon</button>
+            </form>
+        </div>
+
+        {% endif %}
+    </div>
+</body>
+</html>
